@@ -1,9 +1,6 @@
 use std::collections::{HashMap, VecDeque};
-use std::sync::Mutex;
 
-use once_cell::sync::Lazy;
-
-use glam::{IVec3, UVec3, Vec3};
+use glam::{IVec3, UVec3};
 use noise::{NoiseFn, Perlin};
 use rayon::prelude::*;
 
@@ -13,13 +10,9 @@ use crate::voxels::voxel_data::{voxel_shapes, VoxelData, VoxelShape};
 
 pub const CHUNK_SIZE: u32 = 8;
 
-static mut CHUNK_APPEND_QUEUE: Lazy<Mutex<VecDeque<IVec3>>> =
-    Lazy::new(|| Mutex::new(VecDeque::new()));
-
 pub struct VoxelScene {
     pub chunks: HashMap<IVec3, VoxelChunk>,
     chunk_initialize_queue: VecDeque<IVec3>,
-    chunk_append_queue: VecDeque<IVec3>,
 }
 
 impl VoxelScene {
@@ -27,7 +20,6 @@ impl VoxelScene {
         Self {
             chunks: HashMap::default(),
             chunk_initialize_queue: VecDeque::new(),
-            chunk_append_queue: VecDeque::new(),
         }
     }
 
@@ -77,7 +69,7 @@ impl VoxelScene {
 
         // Set chunk data
         let noise = Perlin::new();
-        for (position, chunk) in &mut self.chunks {
+        self.chunks.par_iter_mut().for_each(|(_chunk_pos, chunk)| {
             let chunk_pos_scenespace = chunk.scenespace_pos();
             chunk
                 .voxels
@@ -104,10 +96,7 @@ impl VoxelScene {
                 });
 
             chunk.generate_mesh();
-            self.chunk_append_queue.push_back(*position);
-        }
-
-        self.chunks.par_iter_mut().for_each(|(position, chunk)| {});
+        });
     }
 }
 

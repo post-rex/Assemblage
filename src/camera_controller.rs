@@ -99,11 +99,11 @@ impl CameraController {
             camera.target -= forward_norm * self.speed;
         }
 
-        if (self.is_up_pressed) {
+        if self.is_up_pressed {
             camera.eye += Vector3::unit_y() * self.speed;
             camera.target += Vector3::unit_y() * self.speed;
         }
-        if (self.is_down_pressed) {
+        if self.is_down_pressed {
             camera.eye -= Vector3::unit_y() * self.speed;
             camera.target -= Vector3::unit_y() * self.speed;
         }

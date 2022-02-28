@@ -1,4 +1,3 @@
-use wgpu::Texture;
 use winit::event::ElementState;
 use winit::event::KeyboardInput;
 use winit::event::VirtualKeyCode;
@@ -181,7 +180,7 @@ impl State {
                     label: Some("texture_bind_group_layout"),
                 });
 
-        let diffuse_texture = self.get_texture("lapis_block.png".into());
+        let diffuse_texture = self.get_texture();
 
         let diffuse_bind_group = self.device.create_bind_group(&wgpu::BindGroupDescriptor {
             layout: &texture_bind_group_layout,
@@ -285,13 +284,12 @@ impl State {
             vertex_count,
             index_count,
             diffuse_bind_group,
-            diffuse_texture,
         };
 
         self.render_passes.push(pass);
     }
 
-    pub fn get_texture(&self, name: String) -> texture::Texture {
+    pub fn get_texture(&self) -> texture::Texture {
         let diffuse_bytes = include_bytes!("textures/lapis_block.png");
         texture::Texture::from_bytes(&self.device, &self.queue, diffuse_bytes, "tex.png").unwrap()
     }

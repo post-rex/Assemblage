@@ -9,7 +9,6 @@ mod voxels;
 
 use camera::*;
 use state::*;
-use texture::Texture;
 use voxels::voxel_scene::CHUNK_SIZE;
 
 use glam::{IVec3, UVec3};
@@ -17,13 +16,11 @@ use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::Window,
     window::WindowBuilder,
 };
 
 use wgpu::util::DeviceExt;
 
-use crate::camera_controller::CameraController;
 use crate::types::vertex::Vertex;
 use crate::voxels::voxel_scene::VoxelScene;
 
@@ -87,8 +84,6 @@ async fn main() -> Result<(), ()> {
             _ => {}
         }
     });
-
-    Ok(())
 }
 
 pub async fn generate_world(scene: &mut VoxelScene, state: &mut State, size: UVec3) {
@@ -157,7 +152,6 @@ pub struct RenderPassData {
     index_count: u32,
 
     diffuse_bind_group: wgpu::BindGroup,
-    diffuse_texture: texture::Texture,
 }
 
 impl RenderPassData {
