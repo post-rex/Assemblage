@@ -8,6 +8,15 @@ pub struct Vertex {
 }
 
 impl Vertex {
+    pub fn new(position: [f32; 3]) -> Vertex {
+        Vertex {
+            position,
+            color: [1.0, 1.0, 1.0],
+            normal: [0.0, 0.0, 1.0],
+            uv: [0.0, 0.0],
+        }
+    }
+
     pub fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         wgpu::VertexBufferLayout {
             array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
@@ -27,17 +36,17 @@ impl Vertex {
                 },
                 // Normal
                 wgpu::VertexAttribute {
-                    offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress,
+                    offset: std::mem::size_of::<[f32; 6]>() as wgpu::BufferAddress,
                     shader_location: 2,
                     format: wgpu::VertexFormat::Float32x3,
                 },
                 // UV
                 wgpu::VertexAttribute {
-                    offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress,
+                    offset: std::mem::size_of::<[f32; 9]>() as wgpu::BufferAddress,
                     shader_location: 3,
                     format: wgpu::VertexFormat::Float32x2,
-                }
-            ]
+                },
+            ],
         }
     }
 }
