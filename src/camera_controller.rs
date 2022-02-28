@@ -1,7 +1,7 @@
 use cgmath::Vector3;
 use winit::event::{ElementState, KeyboardInput, VirtualKeyCode, WindowEvent};
 
-use crate::Camera;
+use crate::rendering::camera::Camera;
 
 pub struct CameraController {
     speed: f32,

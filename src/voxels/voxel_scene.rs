@@ -4,8 +4,8 @@ use glam::{IVec3, UVec3};
 use noise::{NoiseFn, Perlin};
 use rayon::prelude::*;
 
-use crate::types::mesh::Mesh;
-use crate::types::vertex::Vertex;
+use crate::rendering::mesh::Mesh;
+use crate::rendering::vertex::Vertex;
 use crate::voxels::voxel_data::{voxel_shapes, VoxelData, VoxelShape};
 
 pub const CHUNK_SIZE: u32 = 8;

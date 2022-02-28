@@ -1,13 +1,10 @@
 #![feature(int_roundings)]
 
-mod camera;
+mod rendering;
 mod camera_controller;
 mod state;
-mod texture;
-mod types;
 mod voxels;
 
-use camera::*;
 use state::*;
 use voxels::voxel_scene::CHUNK_SIZE;
 
@@ -19,9 +16,6 @@ use winit::{
     window::WindowBuilder,
 };
 
-use wgpu::util::DeviceExt;
-
-use crate::types::vertex::Vertex;
 use crate::voxels::voxel_scene::VoxelScene;
 
 #[tokio::main]
@@ -141,35 +135,4 @@ pub async fn generate_world(scene: &mut VoxelScene, state: &mut State, size: UVe
         elapsed / total_chunk_count,
         1.0 / (elapsed / total_chunk_count).as_secs_f32()
     );
-}
-
-pub struct RenderPassData {
-    render_pipeline: wgpu::RenderPipeline,
-
-    vertex_buffer: wgpu::Buffer,
-    vertex_count: u32,
-    index_buffer: wgpu::Buffer,
-    index_count: u32,
-
-    diffuse_bind_group: wgpu::BindGroup,
-}
-
-impl RenderPassData {
-    pub fn set_vertices(&mut self, device: &wgpu::Device, vertices: &Vec<Vertex>) {
-        self.vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(vertices),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-        self.vertex_count = vertices.len() as u32;
-    }
-
-    pub fn set_indices(&mut self, device: &wgpu::Device, indices: &Vec<u32>) {
-        self.index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(indices),
-            usage: wgpu::BufferUsages::INDEX,
-        });
-        self.index_count = indices.len() as u32;
-    }
 }
